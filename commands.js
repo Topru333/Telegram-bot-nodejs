@@ -1,20 +1,20 @@
+const util = require('./util');
+
 const Extra = require('telegraf/extra')
 
 function setCommands(bot) {
   bot.command('alive', (ctx) => ctx.reply('Я жива, все ок.'));
-  bot.command('check', (ctx) => check(ctx));
+  bot.command(check.name, (ctx) => check.do(ctx));
 }
 
-let check = function (ctx) {
+const check = {};
+check.name = 'check';
+check.do = function (ctx) {
   try {
     let result;
     var procent = ('' + (Math.random() * 100)).split(".")[0] + '%';
     var text;
-    if (ctx.message.text.indexOf('@weeb_bot_bot') === 6) {
-      text = ctx.message.text.slice(19).trim();
-    } else {
-      text = ctx.message.text.slice(6).trim();
-    }
+    
 
     if (!text) {
       result = 'Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o';

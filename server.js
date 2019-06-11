@@ -3,7 +3,7 @@ const commands = require('./commands');
 const Telegraf = require('telegraf')
 
 // Bot TOKEN
-const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN, {username: 'your_bot'})
+const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN, {username: process.env.TELEGRAM_BOT_USER_NAME})
 
 const appName = process.env.PROJECT_NAME
 const appPort = process.env.PORT
