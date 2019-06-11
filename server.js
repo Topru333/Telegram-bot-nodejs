@@ -1,24 +1,18 @@
-const Botgram = require('botgram');
-const figlet = require('figlet');
+const Telegraf = require('telegraf')
 
-const TELEGRAM_BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN;
+// Bot TOKEN
+const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN)
 
-if (!TELEGRAM_BOT_TOKEN) {
-  console.error('Seems like you forgot to pass Telegram Bot Token. I can not proceed...');
-  process.exit(1);
-}
+const appName = process.env.PROJECT_NAME
+const appPort = process.env.PORT
 
-const bot = new Botgram(TELEGRAM_BOT_TOKEN);
+// Set Webhook
+bot.telegram.setWebhook(`https://${appName}.glitch.me/webhook`)
+console.log(`Listening incoming webhook on: https://${appName}.glitch.me/webhook`)
 
-function onMessage(msg, reply) {
-  figlet(msg.text, (err, data) => {
-    if (err) {
-      reply.text('An error occured. Probably text format is not correct.').then();
-      return;
-    }
-    const markdownResult = `${'```\n'}${data}${'\n```'}`;
-    reply.markdown(markdownResult).then();
-  });
-}
 
-bot.text(onMessage);
+// Start builtin Webhook
+bot.startWebhook('/webhook', null, appPort)
+
+// Listener
+bot.on('text', (ctx) => ctx.reply('Hello Human'))
