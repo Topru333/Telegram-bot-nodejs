@@ -26,7 +26,8 @@ let check = function (ctx) {
       result = text + ' на ' + procent;
     }
     else {
-      result = '<a href="tg://user?id=' + ctx.message.from.id + '">' + ctx.message.from.first_name + '</a> ' + text + ' на <b>' + procent + '</b>';
+      
+      result = `<a href="tg://user?id=${ctx.message.from.id }"> ${ctx.message.from.first_name}</a> ${text} на <b>${procent}</b>`;
     }
     ctx.message.parse_mode = 'HTML';
 
