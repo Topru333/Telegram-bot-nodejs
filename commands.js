@@ -1,3 +1,5 @@
+const Extra = require('telegraf/extra')
+
 function setCommands(bot) {
   bot.command('alive', (ctx) => ctx.reply('Я жива, все ок.'));
   bot.command('check', (ctx) => check(ctx));
@@ -29,9 +31,8 @@ let check = function (ctx) {
       
       result = `<a href="tg://user?id=${ctx.message.from.id }"> ${ctx.message.from.first_name}</a> ${text} на <b>${procent}</b>`;
     }
-    ctx.message.parse_mode = 'HTML';
-
-    ctx.reply(result);
+    ctx.parse_mode = 'HTML';
+    ctx.reply(result, Extra.HTML());
     }
   catch (e) {
     console.log('Ooops', e)
