@@ -28,6 +28,7 @@ let check = function (ctx) {
     else {
       result = '<a href="tg://user?id=' + ctx.message.from.id + '">' + ctx.message.from.first_name + '</a> ' + text + ' на <b>' + procent + '</b>';
     }
+    ctx.parse_mode = 'HTML';
 
     ctx.reply(result);
     }
