@@ -1,16 +1,17 @@
 function setCommands(bot) {
   bot.command('alive', (ctx) => ctx.reply('Я жива, все ок.'));
+  bot.command('check', (ctx) => check(ctx));
 
 }
 
-let check = function (msg, contents) {
+let check = function (ctx) {
   let result;
   var procent = ('' + (Math.random() * 100)).split(".")[0] + '%';
   var text;
-  if (contents.message.text.indexOf('@weeb_bot_bot') === 6) {
-    text = contents.message.text.slice(19).trim();
+  if (ctx.message.text.indexOf('@weeb_bot_bot') === 6) {
+    text = ctx.message.text.slice(19).trim();
   } else {
-    text = contents.message.text.slice(6).trim();
+    text = ctx.message.text.slice(6).trim();
   }
   
   if (!text) {
@@ -18,14 +19,15 @@ let check = function (msg, contents) {
     return;
   }
     
-  if (contents.message.entities.length > 1 && (contents.message.entities[1].type === 'text_mention' || contents.message.entities[1].type === 'mention')) {
-    if (contents.message.entities[1].type === 'text_mention') {
-      text = text.replace(contents.message.entities[1].user.first_name, ('<a href="tg://user?id=' + contents.message.entities[1].user.id + '">' + contents.message.entities[1].user.first_name + '</a>'));
+  if (ctx.message.entities.length > 1 && (ctx.message.entities[1].type === 'text_mention' || ctx.message.entities[1].type === 'mention')) {
+    if (ctx.message.entities[1].type === 'text_mention') {
+      text = text.replace(ctx.message.entities[1].user.first_name, ('<a href="tg://user?id=' + ctx.message.entities[1].user.id + '">' + ctx.message.entities[1].user.first_name + '</a>'));
     }
     result = text + ' на ' + procent;
   }
   else {
-    result = '<a href="tg://user?id=' + contents.message.from.id + '">' + contents.message.from.first_name + '</a> ' + text + ' на <b>' + procent + '</b>';
+    result = '<a href="tg://user?id=' + ctx.message.from.id + '">' + ctx.message.from.first_name + '</a> ' + text + ' на <b>' + procent + '</b>';
   }
-  return result;
+  
+  ctx.reply(result);
 }
