@@ -1,3 +1,5 @@
+const commands = require('./commands');
+
 const Telegraf = require('telegraf')
 
 // Bot TOKEN
@@ -23,6 +25,6 @@ bot.startWebhook('/webhook', null, appPort)
 // Listener
 //bot.on('text', (ctx) => ctx.reply('Hello Human'))
 bot.hears('сука', (ctx) => ctx.reply('блять'));
-bot.command('help', (ctx) => ctx.reply('я бот на замену, только оригу не говорите плиз'));
+commands.setCommands(bot);
 
 console.log(`Listening incoming webhook on: https://${appName}.glitch.me/webhook`)
