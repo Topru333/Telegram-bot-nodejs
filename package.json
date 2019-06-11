@@ -10,8 +10,10 @@
     "start": "node index.js"
   },
   "dependencies": {
+    "babel": "^6.23.0",
     "botgram": "^2.2.0",
     "express": "^4.16.3",
+    "figlet": "^1.2.3",
     "sqlite3": "^4.0.0"
   },
   "engines": {

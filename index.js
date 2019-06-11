@@ -1,7 +1,7 @@
 const Botgram = require('botgram');
 const figlet = require('figlet');
 
-const { TELEGRAM_BOT_TOKEN } = process.env;
+const TELEGRAM_BOT_TOKEN = process.env.SECRET;
 
 if (!TELEGRAM_BOT_TOKEN) {
   console.error('Seems like you forgot to pass Telegram Bot Token. I can not proceed...');
