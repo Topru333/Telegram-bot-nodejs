@@ -7,3 +7,5 @@ function cutTextCommand(text, command) {
       return text.slice(command.length + 1).trim();
   }
 }
+
+module.exports.cutTextCommand = cutTextCommand;

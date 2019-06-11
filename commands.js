@@ -13,9 +13,8 @@ check.do = function (ctx) {
   try {
     let result;
     var procent = ('' + (Math.random() * 100)).split(".")[0] + '%';
-    var text;
+    var text = util.cutTextCommand(ctx.message.text, check.name);
     
-
     if (!text) {
       result = 'Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o';
       return;
