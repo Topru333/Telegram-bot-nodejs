@@ -69,9 +69,29 @@ commands.push({
     let cx = process.env.GOOGLE_SEARCH_CX;
     let url = `https://www.googleapis.com/customsearch/v1?key=${api_key}&cx=${cx}&q=${text.split(' ').join('+')}`;
     request.get(url, function (error, response, body) {
-      if (!response || response.statusCode != 200) {
-        console.log(response)
+      if (error) {
+        console.error('Handle error, was problem with search api. Can be problem with quotas.');
+        console.error(JSON.stringify(error));
+        ctx.reply('Handle error, please check logs.');
+        return;
       }
+      if (!response || response.statusCode != 200) {
+        console.error('Handle response code error, was problem with search api. Can be problem with quotas.');
+        console.error(JSON.stringify(response));
+        ctx.reply('Handle response code error, please check logs.');
+        return;
+      }
+      
+      let max = body.items && body.items.length > 20 ? 20 : body.items.length;
+      let index = body.floor(Math.random() * max);
+  
+      let link = body.items[index].link;
+      let name = body.items[index].title;
+      let text = '<b>' + name + '</b>   <a href="' + link + '">Ссылка</a>';
+      ctx.parse_mode = 'HTML';
+      ctx.reply_to_message_id = ctx.message.id;
+      ctx.reply(result, Extra.HTML());
+      //ctx.reply(JSON.stringify(body));
     });
   }
 });
