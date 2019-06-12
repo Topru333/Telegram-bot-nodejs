@@ -66,7 +66,8 @@ commands.push({
     let text = util.cutTextCommand(ctx.message.text, this.name);
     let api_key = process.env.GOOGLE_SEARCH_API_KEY;
     let cx = process.env.GOOGLE_SEARCH_CX;
-    let url = `https://www.googleapis.com/customsearch/v1?key=${api_key}&cx=${cx}&q=${text.split(' ').join('+')}}`;
+    let url = `https://www.googleapis.com/customsearch/v1?key=${api_key}&cx=${cx}&q=${text.split(' ').join('+')}`;
+    ctx.reply(url);
   }
 });
 
