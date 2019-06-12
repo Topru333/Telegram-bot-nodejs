@@ -12,6 +12,8 @@ function setCommands(bot) {
 
 const commands = [];
 
+let empty_error = 'Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o';
+
 commands.push({
   name: 'alive',
   do: function (ctx) {
@@ -28,7 +30,7 @@ commands.push({
       let text = util.cutTextCommand(ctx.message.text, this.name);
 
       if (!text) {
-        result = 'Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o';
+        result = empty_error;
         return;
       }
 
@@ -42,7 +44,7 @@ commands.push({
         result = `<a href="tg://user?id=${ctx.message.from.id }"> ${ctx.message.from.first_name}</a> ${text} на <b>${procent}</b>`;
       }
       ctx.replyWithHTML(result);
-      }
+    }
     catch (e) {
       console.log('Ooops', e)
     }
@@ -64,6 +66,10 @@ commands.push({
   name: 'search',
   do: function (ctx)  {
     let text = util.cutTextCommand(ctx.message.text, this.name);
+    if (!text) {
+      ctx.reply(empty_error);
+      return;
+    }
     let api_key = process.env.GOOGLE_SEARCH_API_KEY;
     let cx = process.env.GOOGLE_SEARCH_CX;
     let url = `https://www.googleapis.com/customsearch/v1?key=${api_key}&cx=${cx}&q=${text.split(' ').join('+')}`;
@@ -100,6 +106,10 @@ commands.push({
   name: 'pic',
   do: function (ctx)  {
     let text = util.cutTextCommand(ctx.message.text, this.name);
+    if (!text) {
+      ctx.reply(empty_error);
+      return;
+    }
     let api_key = process.env.GOOGLE_SEARCH_API_KEY;
     let cx = process.env.GOOGLE_SEARCH_CX;
     let url = `https://www.googleapis.com/customsearch/v1?key=${api_key}&cx=${cx}&q=${text.split(' ').join('+')}`;
