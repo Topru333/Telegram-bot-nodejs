@@ -88,8 +88,9 @@ commands.push({
       let name = response_result.items[index].title;
       let text = '<b>' + name + '</b>   <a href="' + link + '">Ссылка</a>';
       console.log(text);
-      ctx.reply('msg1');
-      return ctx.replyWithHTML(text);
+      ctx.reply('msg1').then(data => console.log(data))
+      .catch(err => console.error(err));
+      ctx.replyWithHTML(text);
     });
   }
 });
