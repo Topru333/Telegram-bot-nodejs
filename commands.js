@@ -5,6 +5,7 @@ const Extra = require('telegraf/extra')
 function setCommands(bot) {
   bot.command('alive', (ctx) => ctx.reply('Я жива, все ок.'));
   bot.command(check.name, (ctx) => check.do(ctx));
+  bot.command(test.name, (ctx) => test.do(ctx));
 }
 
 const check = {};
@@ -12,8 +13,8 @@ check.name = 'check';
 check.do = function (ctx) {
   try {
     let result;
-    var procent = ('' + (Math.random() * 100)).split(".")[0] + '%';
-    var text = util.cutTextCommand(ctx.message.text, check.name);
+    let procent = ('' + (Math.random() * 100)).split(".")[0] + '%';
+    let text = util.cutTextCommand(ctx.message.text, check.name);
     
     if (!text) {
       result = 'Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o';
@@ -38,12 +39,14 @@ check.do = function (ctx) {
 }
 
 const test = {};
-test.name = 'check';
-test.do = function (msg, contents)  {
-  var sheet = ss.getSheetByName('TestMessages');
-  sheet.appendRow([new Date(), JSON.stringify(contents, null, 4)]);
-  msg.text = JSON.stringify(contents, null, 4);
-  sendText(msg);
+test.name = 'test';
+test.do = function (ctx)  {
+  ctx.reply(JSON.stringify(ctx.message, null, 4));
 }
 
+const search = {};
+search.name = 'search';
+search.do = function (ctx)  {
+  ctx.reply(JSON.stringify(ctx.message, null, 4));
+}
 module.exports.setCommands = setCommands;
