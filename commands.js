@@ -185,7 +185,12 @@ commands.push({
     let url = `https://api.mcsrvstat.us/2/alex-fk.servegame.com`;
     request.get(url, (error, response, body) => {
       util.checkError(ctx, response, error, 'mcsrvstat rest api');
+      let response_result = JSON.parse(body);
+      ctx.webhookReply = false;
       
+      if (!response_result.online) {
+        ctx.reply (`Server [${response_result.hostname}] is ofline right now, please try later.`);
+      }
     });
   }
 });
