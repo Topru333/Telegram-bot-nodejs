@@ -46,12 +46,9 @@ const commands = {
   },
   search: {
     do: function (ctx)  {
-      let text = util.cutTextCommand(ctx.message.text, search  .name);
+      let text = util.cutTextCommand(ctx.message.text, search.name);
     }
   }
 };
 
-const search = {};
-search.name = 'search';
-search.
 module.exports.setCommands = setCommands;
