@@ -81,16 +81,12 @@ commands.push({
         return;
       }
       let response_result = JSON.parse(body);
-      let max = response_result.items && response_result.items.length > 20 ? 20 : response_result.items.length;
-      let index = Math.floor(Math.random() * max);
       
-      let link = response_result.items[index].link;
-      let name = response_result.items[index].title;
+      let link = response_result.items[0].link;
+      let name = response_result.items[0].title;
       let text = '<b>' + name + '</b>   <a href="' + link + '">Ссылка</a>';
-      console.log(text);
       ctx.webhookReply = false;
-
-      ctx.replyWithHTML(text, Extra.inReplyTo(ctx.message.id));
+      ctx.replyWithHTML(text, Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
     });
   }
 });
