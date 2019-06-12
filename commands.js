@@ -81,17 +81,16 @@ commands.push({
         ctx.reply('Handle response code error, please check logs.');
         return;
       }
+      let response_result = JSON.parse(body);
+      let max = response_result.items && response_result.items.length > 20 ? 20 : response_result.items.length;
+      let index = response_result.floor(Math.random() * max);
       
-      let max = body.items && body.items.length > 20 ? 20 : body.items.length;
-      let index = body.floor(Math.random() * max);
-  
-      let link = body.items[index].link;
-      let name = body.items[index].title;
+      let link = response_result.items[index].link;
+      let name = response_result.items[index].title;
       let text = '<b>' + name + '</b>   <a href="' + link + '">Ссылка</a>';
       ctx.parse_mode = 'HTML';
       ctx.reply_to_message_id = ctx.message.id;
-      ctx.reply(result, Extra.HTML());
-      //ctx.reply(JSON.stringify(body));
+      return ctx.reply(text);
     });
   }
 });
