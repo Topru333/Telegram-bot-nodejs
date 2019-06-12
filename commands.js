@@ -35,7 +35,7 @@ commands.push({
         if (ctx.message.entities[1].type === 'text_mention') {
           text = text.replace(ctx.message.entities[1].user.first_name, ('<a href="tg://user?id=' + ctx.message.entities[1].user.id + '">' + ctx.message.entities[1].user.first_name + '</a>'));
         }
-        result = text + ' на ' + procent;
+        result = `${text} на ${procent}`;
       }
       else {
         result = `<a href="tg://user?id=${ctx.message.from.id }"> ${ctx.message.from.first_name}</a> ${text} на <b>${procent}</b>`;
@@ -66,9 +66,7 @@ commands.push({
     let text = util.cutTextCommand(ctx.message.text, this.name);
     let api_key = process.env.GOOGLE_SEARCH_API_KEY;
     let cx = process.env.GOOGLE_SEARCH_CX;
-    
-    var url = ('https://www.googleapis.com/customsearch/v1?key=%key%&cx=%cx%&q=').replace("%key%", encodeURIComponent(api_key)).replace("%cx%", encodeURIComponent(cx)) + text.split(' ').join('+');
-
+    let url = `https://www.googleapis.com/customsearch/v1?key=${api_key}&cx=${cx}&q=${text.split(' ').join('+')}}`;
   }
 });
 
