@@ -225,5 +225,15 @@ commands.push({
   }
 });
 
+commands.push({
+  name: 'minecraft',
+  do: function (ctx)  {
+    if (ctx.message.reply_to_message) {
+      ctx.reply(JSON.stringify(ctx.message.reply_to_message, null, 4));
+    } else {
+      ctx.reply(JSON.stringify(ctx.message, null, 4));
+    }
+  }
+});
 
 module.exports.setCommands = setCommands;
