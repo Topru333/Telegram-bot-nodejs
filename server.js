@@ -4,7 +4,6 @@ const Telegraf = require('telegraf')
 
 // Bot TOKEN
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN, {username: process.env.TELEGRAM_BOT_USER_NAME})
-b
 const appName = 'telegram-weeb-bot'
 const appPort = process.env.PORT
 

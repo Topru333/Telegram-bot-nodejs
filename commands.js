@@ -41,8 +41,7 @@ commands.push({
       else {
         result = `<a href="tg://user?id=${ctx.message.from.id }"> ${ctx.message.from.first_name}</a> ${text} на <b>${procent}</b>`;
       }
-      ctx.parse_mode = 'HTML';
-      ctx.reply(result, Extra.HTML());
+      ctx.replyWithHTML(result);
       }
     catch (e) {
       console.log('Ooops', e)
@@ -68,7 +67,7 @@ commands.push({
     let api_key = process.env.GOOGLE_SEARCH_API_KEY;
     let cx = process.env.GOOGLE_SEARCH_CX;
     let url = `https://www.googleapis.com/customsearch/v1?key=${api_key}&cx=${cx}&q=${text.split(' ').join('+')}`;
-    request.get(url, function (error, response, body) {
+    request.get(url, (error, response, body) => {
       if (error) {
         console.error('Handle error, was problem with search api. Can be problem with quotas.');
         console.error(JSON.stringify(error));
@@ -89,10 +88,8 @@ commands.push({
       let name = response_result.items[index].title;
       let text = '<b>' + name + '</b>   <a href="' + link + '">Ссылка</a>';
       console.log(text);
-      ctx.parse_mode = 'HTML';
-      //ctx.reply_to_message_id = ctx.message.id;
-      
-      console.log(ctx.reply(text, Extra.HTML()));
+      ctx.reply('msg1');
+      return ctx.replyWithHTML(text);
     });
   }
 });
