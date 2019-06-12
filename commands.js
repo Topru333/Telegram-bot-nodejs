@@ -190,7 +190,10 @@ commands.push({
       
       if (!response_result.online) {
         ctx.reply (`Server [${response_result.hostname}] is ofline right now, please try later.`);
+        return;
       }
+      
+      ctx.replyWithHTML(decodeURI(`Server <em>${response_result.hostname}</em> is <b>online</b>. %0AVersion: <b>${response_result.version}</b> %0AOnline players: <b>${response_result.players.online}</b>`));
     });
   }
 });
