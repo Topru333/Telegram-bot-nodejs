@@ -81,12 +81,53 @@ commands.push({
         return;
       }
       let response_result = JSON.parse(body);
-      
-      let link = response_result.items[0].link;
-      let name = response_result.items[0].title;
-      let text = `<a href="${link}">${name}</a>`;
       ctx.webhookReply = false;
-      ctx.replyWithHTML(text, Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+      
+      if (!response_result.items || response_result.items.length == 0) {
+        ctx.replyWithHTML('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+      } else {
+        let link = response_result.items[0].link;
+        let name = response_result.items[0].title;
+        let text = `<a href="${link}">${name}</a>`;
+      
+        ctx.replyWithHTML(text, Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+      }
+    });
+  }
+});
+
+commands.push({
+  name: 'pic',
+  do: function (ctx)  {
+    let text = util.cutTextCommand(ctx.message.text, this.name);
+    let api_key = process.env.GOOGLE_SEARCH_API_KEY;
+    let cx = process.env.GOOGLE_SEARCH_CX;
+    let url = `https://www.googleapis.com/customsearch/v1?key=${api_key}&cx=${cx}&q=${text.split(' ').join('+')}`;
+    request.get(url, (error, response, body) => {
+      if (error) {
+        console.error('Handle error, was problem with search api. Can be problem with quotas.');
+        console.error(JSON.stringify(error));
+        ctx.reply('Handle error, please check logs.');
+        return;
+      }
+      if (!response || response.statusCode != 200) {
+        console.error('Handle response code error, was problem with search api. Can be problem with quotas.');
+        console.error(JSON.stringify(response));
+        ctx.reply('Handle response code error, please check logs.');
+        return;
+      }
+      let response_result = JSON.parse(body);
+      ctx.webhookReply = false;
+      
+      if (!response_result.items || response_result.items.length == 0) {
+        ctx.replyWithHTML('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+      } else {
+        let link = response_result.items[0].link;
+        let name = response_result.items[0].title;
+        let text = `<a href="${link}">${name}</a>`;
+      
+        ctx.replyWithHTML(text, Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+      }
     });
   }
 });
