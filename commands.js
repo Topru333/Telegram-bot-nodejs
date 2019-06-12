@@ -146,4 +146,42 @@ commands.push({
   }
 });
 
+commands.push({
+  name: 'gfycat',
+  do: function (ctx)  {
+    let text = util.cutTextCommand(ctx.message.text, this.name);
+    let url = `https://api.gfycat.com/v1/gfycats/search?search_text=${text.split(' ').join('+')}`;
+    request.get(url, (error, response, body) => {
+      if (error) {
+        console.error('Handle error, was problem with search api. Can be problem with quotas.');
+        console.error(JSON.stringify(error));
+        ctx.reply('Handle error, please check logs.');
+        return;
+      }
+      if (!response || response.statusCode != 200) {
+        console.error('Handle response code error, was problem with search api. Can be problem with quotas.');
+        console.error(JSON.stringify(response));
+        ctx.reply('Handle response code error, please check logs.');
+        return;
+      }
+      let response_result = JSON.parse(body);
+      ctx.webhookReply = false;
+      
+      if (!response_result.items || response_result.items.length == 0) {
+        ctx.replyWithHTML('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+      } else {
+        let max = response_result.items.length > 15 ? 15 : response_result.items.length;
+        let index = Math.floor(Math.random() * max);
+        
+        let link = response_result.items[index].link;
+        let name = response_result.items[index].title;
+        let text = `<a href="${link}">${name}</a>`;
+        const extra = Extra.HTML(true);
+        extra.reply_to_message_id = ctx.message.message_id;
+        ctx.replyWithPhoto(link, extra)
+      }
+    });
+  }
+});
+
 module.exports.setCommands = setCommands;
