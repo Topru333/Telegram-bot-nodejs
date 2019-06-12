@@ -90,7 +90,7 @@ commands.push({
       ctx.webhookReply = false;
       
       if (!response_result.items || response_result.items.length == 0) {
-        ctx.replyWithHTML('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+        ctx.reply('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
       } else {
         let link = response_result.items[0].link;
         let name = response_result.items[0].title;
@@ -132,7 +132,7 @@ commands.push({
       ctx.webhookReply = false;
       
       if (!response_result.items || response_result.items.length == 0) {
-        ctx.replyWithHTML('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+        ctx.reply('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
       } else {
         let max = response_result.items.length > 15 ? 15 : response_result.items.length;
         let index = Math.floor(Math.random() * max);
@@ -171,6 +171,17 @@ commands.push({
       let response_result = JSON.parse(body);
       ctx.webhookReply = false;
       
+       
+      if (!response_result.gfycats || response_result.gfycats.length == 0) {
+        ctx.reply('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+        return;
+      }
+
+      let max = response_result.gfycats.length;
+      let index = Math.floor(Math.random() * max);
+      let link = response_result.gfycats[index].gifUrl;
+      const extra = Extra.inReplyTo(ctx.message.message_id);
+      ctx.replyWithDocument(link, extra);
     });
   }
 });
