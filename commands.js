@@ -198,16 +198,20 @@ commands.push({
   }
 });
 
-commands.push({
+commands.push({  
   name: 'everyone',
   do: function (ctx)  {
-    let users = ctx.telegram.getChatAdministrators(ctx.chat.id);
-    let result = '';
-    for (let i in users) {
-      if (!users[i].user.is_bot) {
-        result = `${result} <a href="tg://user?id=${users[i].user.id}">${users[i].user.first_name}`  msg.text + ' ' + '<a href="tg://user?id=' + users[i].user.id + '">' + users[i].user.first_name + '</a> '
+    ctx.telegram.getChatAdministrators(ctx.chat.id).then((users) => {
+      ctx.webhookReply = false;
+      let result = '';
+      for (let i in users) {
+        if (!users[i].user.is_bot) {
+          result = `${result} <a href="tg://user?id=${users[i].user.id}">${users[i].user.first_name}</a>`;
+        }
       }
-    }
+      ctx.replyWithHTML(result, Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+    });
+    
   }
 });
 
