@@ -83,14 +83,16 @@ commands.push({
       }
       let response_result = JSON.parse(body);
       let max = response_result.items && response_result.items.length > 20 ? 20 : response_result.items.length;
-      let index = response_result.floor(Math.random() * max);
+      let index = Math.floor(Math.random() * max);
       
       let link = response_result.items[index].link;
       let name = response_result.items[index].title;
       let text = '<b>' + name + '</b>   <a href="' + link + '">Ссылка</a>';
+      console.log(text);
       ctx.parse_mode = 'HTML';
-      ctx.reply_to_message_id = ctx.message.id;
-      return ctx.reply(text);
+      //ctx.reply_to_message_id = ctx.message.id;
+      
+      console.log(ctx.reply(text, Extra.HTML()));
     });
   }
 });
