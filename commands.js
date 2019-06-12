@@ -47,6 +47,6 @@ test.do = function (ctx)  {
 const search = {};
 search.name = 'search';
 search.do = function (ctx)  {
-  ctx.reply(JSON.stringify(ctx.message, null, 4));
+  let text = util.cutTextCommand(ctx.message.text, search  .name);
 }
 module.exports.setCommands = setCommands;
