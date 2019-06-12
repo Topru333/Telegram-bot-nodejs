@@ -37,4 +37,13 @@ check.do = function (ctx) {
   }
 }
 
+const test = {};
+test.name = 'check';
+test.do = function (msg, contents)  {
+  var sheet = ss.getSheetByName('TestMessages');
+  sheet.appendRow([new Date(), JSON.stringify(contents, null, 4)]);
+  msg.text = JSON.stringify(contents, null, 4);
+  sendText(msg);
+}
+
 module.exports.setCommands = setCommands;
