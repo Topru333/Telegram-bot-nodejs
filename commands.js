@@ -74,18 +74,8 @@ commands.push({
     let cx = process.env.GOOGLE_SEARCH_CX;
     let url = `https://www.googleapis.com/customsearch/v1?key=${api_key}&cx=${cx}&q=${text.split(' ').join('+')}`;
     request.get(url, (error, response, body) => {
-      if (error) {
-        console.error('Handle error, was problem with search api. Can be problem with quotas.');
-        console.error(JSON.stringify(error));
-        ctx.reply('Handle error, please check logs.');
-        return;
-      }
-      if (!response || response.statusCode != 200) {
-        console.error('Handle response code error, was problem with search api. Can be problem with quotas.');
-        console.error(JSON.stringify(response));
-        ctx.reply('Handle response code error, please check logs.');
-        return;
-      }
+      util.checkError(ctx, response, error, 'search api. Can be problem with quotas');
+      
       let response_result = JSON.parse(body);
       ctx.webhookReply = false;
       
@@ -114,20 +104,8 @@ commands.push({
     let cx = process.env.GOOGLE_SEARCH_CX;
     let url = `https://www.googleapis.com/customsearch/v1?key=${api_key}&cx=${cx}&searchType=image&q=${text.split(' ').join('+')}`;
     request.get(url, (error, response, body) => {
-      if (error) {
-        console.error('Handle error, was problem with search api. Can be problem with quotas.');
-        console.error(JSON.stringify(error));
-        ctx.reply('Handle error, please check logs.');
-        return;
-      }
-      
-      if (!response || response.statusCode != 200) {
-        console.error('Handle response code error, was problem with search api. Can be problem with quotas.');
-        console.error(JSON.stringify(response));
-        ctx.reply('Handle response code error, please check logs.');
-        return;
-      }
-      
+      util.checkError(ctx, response, error, 'search api. Can be problem with quotas');
+
       let response_result = JSON.parse(body);
       ctx.webhookReply = false;
       
@@ -154,19 +132,7 @@ commands.push({
     let text = util.cutTextCommand(ctx.message.text, this.name);
     let url = `https://api.gfycat.com/v1/gfycats/search?search_text=${text.split(' ').join('+')}`;
     request.get(url, (error, response, body) => {
-      if (error) {
-        console.error('Handle error, was problem with gfycat api.');
-        console.error(JSON.stringify(error));
-        ctx.reply('Handle error, please check logs.');
-        return;
-      }
-      
-      if (!response || response.statusCode != 200) {
-        console.error('Handle response code error, was problem with gfycat api. ');
-        console.error(JSON.stringify(response));
-        ctx.reply('Handle response code error, please check logs.');
-        return;
-      }
+      util.checkError(ctx, response, error, 'gfycat api');
       
       let response_result = JSON.parse(body);
       ctx.webhookReply = false;
@@ -193,19 +159,7 @@ commands.push({
     let api_key = process.env.GIPHY_API_KEY;
     let url = `http://api.giphy.com/v1/gifs/search?q=${text.split(' ').join('+')}&api_key=${api_key}`;
     request.get(url, (error, response, body) => {
-      if (error) {
-        console.error('Handle error, was problem with giphy api.');
-        console.error(JSON.stringify(error));
-        ctx.reply('Handle error, please check logs.');
-        return;
-      }
-      
-      if (!response || response.statusCode != 200) {
-        console.error('Handle response code error, was problem with giphy api.');
-        console.error(JSON.stringify(response));
-        ctx.reply('Handle response code error, please check logs.');
-        return;
-      }
+      util.checkError(ctx, response, error, 'giphy api');
       
       let response_result = JSON.parse(body);
       ctx.webhookReply = false;
@@ -230,19 +184,8 @@ commands.push({
   do: function (ctx)  {
     let url = `https://api.mcsrvstat.us/2/alex-fk.servegame.com`;
     request.get(url, (error, response, body) => {
-      if (error) {
-        console.error('Handle error, was problem with minecraft rest api.');
-        console.error(JSON.stringify(error));
-        ctx.reply('Handle error, please check logs.');
-        return;
-      }
+      util.checkError(ctx, response, error, 'mcsrvstat rest api');
       
-      if (!response || response.statusCode != 200) {
-        console.error('Handle response code error, was problem with minecraft rest api.');
-        console.error(JSON.stringify(response));
-        ctx.reply('Handle response code error, please check logs.');
-        return;
-      }
     });
   }
 });

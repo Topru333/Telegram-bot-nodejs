@@ -26,3 +26,4 @@ function checkError(ctx, response, error, type) {
 }
 
 module.exports.cutTextCommand = cutTextCommand;
+module.exports.checkError = checkError;
