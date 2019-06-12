@@ -8,4 +8,21 @@ function cutTextCommand(text, command) {
   }
 }
 
+function checkError(ctx, response, error, type) {
+  if (error) {
+    console.error(`Handle error, was problem with ${type}.`);
+    console.error(JSON.stringify(error));
+    ctx.reply('Handle error, please check logs.');
+    return true;
+  }
+      
+  if (!response || response.statusCode != 200) {
+    console.error(`Handle response code error, was problem with ${type}.`);
+    console.error(JSON.stringify(response));
+    ctx.reply('Handle response code error, please check logs.');
+    return true;
+  }
+  return false;
+}
+
 module.exports.cutTextCommand = cutTextCommand;

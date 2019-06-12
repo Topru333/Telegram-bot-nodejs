@@ -228,11 +228,22 @@ commands.push({
 commands.push({
   name: 'minecraft',
   do: function (ctx)  {
-    if (ctx.message.reply_to_message) {
-      ctx.reply(JSON.stringify(ctx.message.reply_to_message, null, 4));
-    } else {
-      ctx.reply(JSON.stringify(ctx.message, null, 4));
-    }
+    let url = `https://api.mcsrvstat.us/2/alex-fk.servegame.com`;
+    request.get(url, (error, response, body) => {
+      if (error) {
+        console.error('Handle error, was problem with minecraft rest api.');
+        console.error(JSON.stringify(error));
+        ctx.reply('Handle error, please check logs.');
+        return;
+      }
+      
+      if (!response || response.statusCode != 200) {
+        console.error('Handle response code error, was problem with minecraft rest api.');
+        console.error(JSON.stringify(response));
+        ctx.reply('Handle response code error, please check logs.');
+        return;
+      }
+    });
   }
 });
 
