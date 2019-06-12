@@ -84,7 +84,7 @@ commands.push({
       
       let link = response_result.items[0].link;
       let name = response_result.items[0].title;
-      let text = '<b>' + name + '</b>   <a href="' + link + '">Ссылка</a>';
+      let text = `<a href="${link}">${name}</a>`;
       ctx.webhookReply = false;
       ctx.replyWithHTML(text, Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
     });
