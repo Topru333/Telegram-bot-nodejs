@@ -198,4 +198,17 @@ commands.push({
   }
 });
 
+commands.push({
+  name: 'everyone',
+  do: function (ctx)  {
+    let users = ctx.telegram.getChatAdministrators(ctx.chat.id);
+    let result = '';
+    for (let i in users) {
+      if (!users[i].user.is_bot) {
+        result = `${result} <a href="tg://user?id=${users[i].user.id}">${users[i].user.first_name}`  msg.text + ' ' + '<a href="tg://user?id=' + users[i].user.id + '">' + users[i].user.first_name + '</a> '
+      }
+    }
+  }
+});
+
 module.exports.setCommands = setCommands;
