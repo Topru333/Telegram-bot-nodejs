@@ -155,14 +155,14 @@ commands.push({
     let url = `https://api.gfycat.com/v1/gfycats/search?search_text=${text.split(' ').join('+')}`;
     request.get(url, (error, response, body) => {
       if (error) {
-        console.error('Handle error, was problem with search api. Can be problem with quotas.');
+        console.error('Handle error, was problem with gfycat api.');
         console.error(JSON.stringify(error));
         ctx.reply('Handle error, please check logs.');
         return;
       }
       
       if (!response || response.statusCode != 200) {
-        console.error('Handle response code error, was problem with search api. Can be problem with quotas.');
+        console.error('Handle response code error, was problem with gfycat api. ');
         console.error(JSON.stringify(response));
         ctx.reply('Handle response code error, please check logs.');
         return;
@@ -190,17 +190,18 @@ commands.push({
   name: 'giphy',
   do: function (ctx)  {
     let text = util.cutTextCommand(ctx.message.text, this.name);
-    let url = `https://api.gfycat.com/v1/gfycats/search?search_text=${text.split(' ').join('+')}`;
+    let api_key = process.env.GIPHY_API_KEY;
+    let url = `http://api.giphy.com/v1/gifs/search?q=${text.split(' ').join('+')}&api_key=${api_key}`;
     request.get(url, (error, response, body) => {
       if (error) {
-        console.error('Handle error, was problem with search api. Can be problem with quotas.');
+        console.error('Handle error, was problem with giphy api.');
         console.error(JSON.stringify(error));
         ctx.reply('Handle error, please check logs.');
         return;
       }
       
       if (!response || response.statusCode != 200) {
-        console.error('Handle response code error, was problem with search api. Can be problem with quotas.');
+        console.error('Handle response code error, was problem with giphy api.');
         console.error(JSON.stringify(response));
         ctx.reply('Handle response code error, please check logs.');
         return;
@@ -210,14 +211,14 @@ commands.push({
       ctx.webhookReply = false;
       
        
-      if (!response_result.gfycats || response_result.gfycats.length == 0) {
+      if (!response_result.data || response_result.data.length == 0) {
         ctx.reply('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
         return;
       }
 
-      let max = response_result.gfycats.length;
+      let max = response_result.data.length;
       let index = Math.floor(Math.random() * max);
-      let link = response_result.gfycats[index].gifUrl;
+      let link = response_result.data[index].images.original.url;
       const extra = Extra.inReplyTo(ctx.message.message_id);
       ctx.replyWithDocument(link, extra);
     });
