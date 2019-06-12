@@ -112,7 +112,7 @@ commands.push({
     }
     let api_key = process.env.GOOGLE_SEARCH_API_KEY;
     let cx = process.env.GOOGLE_SEARCH_CX;
-    let url = `https://www.googleapis.com/customsearch/v1?key=${api_key}&cx=${cx}&q=${text.split(' ').join('+')}`;
+    let url = `https://www.googleapis.com/customsearch/v1?key=${api_key}&cx=${cx}&searchType=image&q=${text.split(' ').join('+')}`;
     request.get(url, (error, response, body) => {
       if (error) {
         console.error('Handle error, was problem with search api. Can be problem with quotas.');
@@ -132,11 +132,15 @@ commands.push({
       if (!response_result.items || response_result.items.length == 0) {
         ctx.replyWithHTML('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
       } else {
-        let link = response_result.items[0].link;
-        let name = response_result.items[0].title;
+        let max = response_result.items.length > 15 ? 15 : response_result.items.length;
+        let index = Math.floor(Math.random() * max);
+        
+        let link = response_result.items[index].link;
+        let name = response_result.items[index].title;
         let text = `<a href="${link}">${name}</a>`;
-      
-        ctx.replyWithHTML(text, Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+        const extra = Extra.HTML(true);
+        extra.reply_to_message_id = ctx.message.message_id;
+        ctx.replyWithPhoto(link, extra)
       }
     });
   }
