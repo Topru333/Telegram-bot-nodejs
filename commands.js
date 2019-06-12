@@ -64,6 +64,11 @@ commands.push({
   name: 'search',
   do: function (ctx)  {
     let text = util.cutTextCommand(ctx.message.text, this.name);
+    let api_key = process.env.GOOGLE_SEARCH_API_KEY;
+    let cx = process.env.GOOGLE_SEARCH_CX;
+    
+    var url = ('https://www.googleapis.com/customsearch/v1?key=%key%&cx=%cx%&q=').replace("%key%", encodeURIComponent(api_key)).replace("%cx%", encodeURIComponent(cx)) + text.split(' ').join('+');
+
   }
 });
 
