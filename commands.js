@@ -45,6 +45,13 @@ const commands = [];
 let empty_error = 'Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o';
 
 commands.push({
+  name: 'sheets',
+  do: function (ctx) {
+    ctx.reply('https://docs.google.com/spreadsheets/d/1HgpzWnRJqi1YQZ1YxvPbUoJCnAFYCoD73l38eeBofdM/edit?usp=sharing');
+  }
+});
+
+commands.push({
   name: 'alive',
   do: function (ctx) {
     ctx.reply('Я жива, все ок.');
