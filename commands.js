@@ -16,9 +16,19 @@ function setBindings(bot) {
   lastBindings = new Date().getTime();
   
   let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
+  dasdas
   request.get(url, (error, response, body) => {
-    bot.hears('пинг', (ctx) => ctx.reply('понг'));
-    console.log(JSON.parse(body).commands);
+    let commands = JSON.parse(body).commands;
+    for (let i in commands) {
+      bot.hears('пинг', (ctx) => {
+        let extra = Extra.inReplyTo(ctx.message.message_id);
+        if (commands[i].text) {
+          
+        }
+      });
+    }
+    
+    console.log();
   });
 }
 
@@ -125,7 +135,8 @@ commands.push({
         let link = response_result.items[index].link;
         let name = response_result.items[index].title;
         let text = `<a href="${link}">${name}</a>`;
-        const extra = Extra.HTML(true);
+        let extra = Extra.HTML(true);
+        extra.caption = 'Caption text here'
         extra.reply_to_message_id = ctx.message.message_id;
         ctx.replyWithPhoto(link, extra)
       }
@@ -153,7 +164,7 @@ commands.push({
       let max = response_result.gfycats.length;
       let index = Math.floor(Math.random() * max);
       let link = response_result.gfycats[index].gifUrl;
-      const extra = Extra.inReplyTo(ctx.message.message_id);
+      let extra = Extra.inReplyTo(ctx.message.message_id);
       ctx.replyWithDocument(link, extra);
     });
   }
@@ -180,7 +191,7 @@ commands.push({
       let max = response_result.data.length;
       let index = Math.floor(Math.random() * max);
       let link = response_result.data[index].images.original.url;
-      const extra = Extra.inReplyTo(ctx.message.message_id);
+      let extra = Extra.inReplyTo(ctx.message.message_id);
       ctx.replyWithDocument(link, extra);
     });
   }
