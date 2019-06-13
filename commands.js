@@ -8,6 +8,8 @@ const muted_users = [];
 function setCommands(bot) {
   for (let i in commands) {
     bot.command(commands[i].name, (ctx) => {
+          console.log(JSON.stringify(ctx.message, null, 4));
+
       if (ctx.message && muted_users.indexOf(ctx.message.from.id) != -1){
         ctx.deleteMessage(ctx.message.message_id);
       } else {
@@ -76,6 +78,9 @@ commands.push({
   name: 'check',
   do: function (ctx) {
     let result;
+    if (!ctx.message) {
+      return;
+    }
     
     let text = util.cutTextCommand(ctx.message.text, this.name);
 
