@@ -249,7 +249,7 @@ commands.push({
         return;
       }
       
-      return ctx.replyWithHTML(decodeURI(`Server <em>${response_result.hostname}</em> is <b>online</b>. %0AVersion: <b>${response_result.version}</b> %0AOnline players: <b>${response_result.players.online}</b>`));
+      return ctx.replyWithHTML(decodeURI(`Server <em>${response_result.hostname}</em> is <b>online</b>. %0AVersion: <b>${response_result.version}</b> %0AOnline players: <b>${response_result.players.online}</b> %0AMap for server: http://${response_result.hostname}:8123/`));
     });
   }
 });
