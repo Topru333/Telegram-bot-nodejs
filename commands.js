@@ -13,15 +13,12 @@ function setCommands(bot) {
 }
 
 function setBindings(bot) {
-  lastBindings = new Date().getTime();
-  
   let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
-  dasdas
   request.get(url, (error, response, body) => {
     let commands = JSON.parse(body).commands;
     for (let i in commands) {
       bot.hears(commands[i].key, (ctx) => {
-        let extra = Extra.inReplyTo(ctx.message.message_id);
+        let extra = new Extra();
         
         if (commands[i].text) {
           extra.caption = commands[i].text;
@@ -34,7 +31,7 @@ function setBindings(bot) {
         } else if (commands[i].sticker) {
           ctx.replyWithSticker(commands[i].sticker, extra);
         } else {
-          ctx.reply(commands[i].text, Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+          ctx.reply(commands[i].text);
         }
       });
     }
