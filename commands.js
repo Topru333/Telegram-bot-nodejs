@@ -17,7 +17,7 @@ function setBindings(bot) {
     let commands = JSON.parse(body).commands;
       for (let i in commands) {
       bot.use((ctx, next) => {
-        if (ctx.message.text && ctx.message.text.includes(commands[i].key)) {
+        if (ctx.message.text && ctx.message.text.toLowerCase().includes(commands[i].key.toLowerCase())) {
           let extra = new Extra();
           if (commands[i].text) {
             extra.caption = commands[i].text;
