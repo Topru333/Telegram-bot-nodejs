@@ -3,6 +3,8 @@ const request = require('request');
 
 const Extra = require('telegraf/extra')
 
+let lastBindings;
+
 function setCommands(bot) {
   bot.command('wot', (ctx) => ctx.reply('hot'));
   for (let i in commands) {
@@ -11,7 +13,12 @@ function setCommands(bot) {
 }
 
 function setBindings(bot) {
-  let url = process.env.TELEGRAM_BOT_TOKEN;
+  lastBindings = new Date().getTime();
+  
+  let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
+  request.get(url, (error, response, body) => {
+    console.log(JSON.stringify(body, null, 4));
+  });
 }
 
 const commands = [];
@@ -215,4 +222,13 @@ commands.push({
   }
 });
 
+commands.push({
+  name: 'restart',
+  do: function (ctx) {
+    ctx.reply('Провожу рестарт. Подождите пару секунд пожалуйста.');
+    process.exit(1);
+  }
+});
+
 module.exports.setCommands = setCommands;
+module.exports.setBindings = setBindings;
