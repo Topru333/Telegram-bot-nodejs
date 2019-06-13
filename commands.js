@@ -272,14 +272,6 @@ commands.push({
 });
 
 commands.push({
-  name: 'restart',
-  do: function (ctx) {
-    ctx.reply('Провожу рестарт. Подождите пару секунд пожалуйста.');
-    process.exit(1);
-  }
-});
-
-commands.push({
   name: 'mute',
   do: function (ctx) {
     if (ctx.message.chat.type === "private") {

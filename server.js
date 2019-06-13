@@ -1,7 +1,7 @@
 const commands = require('./commands');
 
 const Telegraf = require('telegraf')
-
+уйцуцй
 // Bot TOKEN
 const bot = new Telegraf(process.env.TELEGRAM_BOT_TOKEN, {username: process.env.TELEGRAM_BOT_USER_NAME})
 const appName = 'telegram-weeb-bot'
