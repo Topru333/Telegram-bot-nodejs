@@ -8,7 +8,7 @@ const muted_users = [];
 function setCommands(bot) {
   for (let i in commands) {
     bot.command(commands[i].name, (ctx) => {
-      if (muted_users.indexOf(ctx.message.from.id) != -1){
+      if (ctx.message && muted_users.indexOf(ctx.message.from.id) != -1){
         ctx.deleteMessage(ctx.message.message_id);
       } else {
         commands[i].do(ctx)
@@ -19,7 +19,7 @@ function setCommands(bot) {
 
 function setBindings(bot) {
   bot.use((ctx, next) => {
-    if (muted_users.indexOf(ctx.message.from.id) != -1){
+    if (ctx.message && muted_users.indexOf(ctx.message.from.id) != -1){
       ctx.deleteMessage(ctx.message.message_id);
     } else {
       next();
