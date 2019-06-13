@@ -7,7 +7,7 @@ let lastBindings;
 
 function setCommands(bot) {
   bot.command('wot', (ctx) => ctx.reply('hot'));
-  bot.hears('h', (ctx) => ctx.reply('hot'));
+  bot.on('h', (ctx) => ctx.reply('hot'));
   for (let i in commands) {
     bot.command(commands[i].name, (ctx) => commands[i].do(ctx));
   }
