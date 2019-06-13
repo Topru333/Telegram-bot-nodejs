@@ -3,7 +3,7 @@ const request = require('request');
 
 const Extra = require('telegraf/extra')
 
-let lastBindings;
+const muted_users = [];
 
 function setCommands(bot) {
   for (let i in commands) {
@@ -248,6 +248,14 @@ commands.push({
   }
 });
 
+commands.push({
+  name: 'restart',
+  do: function (ctx) {
+    ctx.reply('Провожу рестарт. Подождите пару секунд пожалуйста.');
+    process.exit(1);
+  }
+});
+dsds
 commands.push({
   name: 'restart',
   do: function (ctx) {
