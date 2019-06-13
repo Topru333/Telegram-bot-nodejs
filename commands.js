@@ -25,7 +25,7 @@ function setBindings(bot) {
       next();
     }
   });
-  
+
   let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
   request.get(url, (error, response, body) => {
     let commands = JSON.parse(body).commands;
@@ -39,8 +39,8 @@ function setBindings(bot) {
 
           if (commands[i].pic) {
             ctx.replyWithPhoto(commands[i].pic, extra);
-          } else if (commands[i].gif) {
-            ctx.replyWithDocument(commands[i].gif, extra);
+          } else if (commands[i].document) {
+            ctx.replyWithDocument(commands[i].document, extra);
           } else if (commands[i].sticker) {
             ctx.replyWithSticker(commands[i].sticker);
           } else {
@@ -76,7 +76,7 @@ commands.push({
   name: 'check',
   do: function (ctx) {
     let result;
-    let procent = ('' + (Math.random() * 100)).split(".")[0] + '%';
+    
     let text = util.cutTextCommand(ctx.message.text, this.name);
 
     if (!text) {
@@ -84,6 +84,8 @@ commands.push({
       return;
     }
 
+    let procent = ('' + (Math.random() * 100)).split(".")[0] + '%';
+    
     if (ctx.message.entities.length > 1 && (ctx.message.entities[1].type === 'text_mention' || ctx.message.entities[1].type === 'mention')) {
       if (ctx.message.entities[1].type === 'text_mention') {
         text = text.replace(ctx.message.entities[1].user.first_name, ('<a href="tg://user?id=' + ctx.message.entities[1].user.id + '">' + ctx.message.entities[1].user.first_name + '</a>'));
