@@ -7,7 +7,6 @@ let lastBindings;
 
 function setCommands(bot) {
   bot.command('wot', (ctx) => ctx.reply('hot'));
-  bot.on('h', (ctx) => ctx.reply('hot'));
   for (let i in commands) {
     bot.command(commands[i].name, (ctx) => commands[i].do(ctx));
   }
@@ -18,23 +17,26 @@ function setBindings(bot) {
   request.get(url, (error, response, body) => {
     let commands = JSON.parse(body).commands;
     for (let i in commands) {
-      bot.hears(commands[i].key, (ctx) => {
-        let extra = new Extra();
+      bot.use((ctx, next) => {
+        if (ctx.message.text.includes(commands[i].key)) {
+          let extra = new Extra();
         
-        if (commands[i].text) {
-          extra.caption = commands[i].text;
+          if (commands[i].text) {
+            extra.caption = commands[i].text;
+          }
+
+          if (commands[i].pic) {
+            ctx.replyWithPhoto(commands[i].pic, extra);
+          } else if (commands[i].gif) {
+            ctx.replyWithDocument(commands[i].gif, extra);
+          } else if (commands[i].sticker) {
+            ctx.replyWithSticker(commands[i].sticker, extra);
+          } else {
+            ctx.reply(commands[i].text);
+          }
         }
-        
-        if (commands[i].pic) {
-          ctx.replyWithPhoto(commands[i].pic, extra);
-        } else if (commands[i].gif) {
-          ctx.replyWithDocument(commands[i].gif, extra);
-        } else if (commands[i].sticker) {
-          ctx.replyWithSticker(commands[i].sticker, extra);
-        } else {
-          ctx.reply(commands[i].text);
-        }
-      });
+        next();
+      })
     }
     console.log('Spreadsheet commands has bound.');
   });
@@ -215,7 +217,7 @@ commands.push({
       ctx.webhookReply = false;
       
       if (!response_result.online) {
-        ctx.reply (`Server [${response_result.hostname}] is ofline right now, please try later.`);
+        ctx.reply (`Server ${response_result.hostname} is ofline right now, please try later.`);
         return;
       }
       
