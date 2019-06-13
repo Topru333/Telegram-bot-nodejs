@@ -17,7 +17,7 @@ function setBindings(bot) {
   
   let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
   request.get(url, (error, response, body) => {
-    console.log(JSON.stringify(body, null, 4));
+    console.log(body);
   });
 }
 
