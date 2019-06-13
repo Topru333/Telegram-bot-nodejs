@@ -10,12 +10,6 @@ const appPort = process.env.PORT
 // Set Webhook
 bot.telegram.setWebhook(`https://${appName}.glitch.me/webhook`)
 
-//bot.use((ctx, next) => {
-//  ctx.reply('test');
-//  next();
-//})
-
-
 bot.catch((err) => {
   console.log('Ooops', err)
 })

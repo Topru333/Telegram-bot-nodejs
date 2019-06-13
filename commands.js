@@ -264,7 +264,7 @@ commands.push({
     process.exit(1);
   }
 });
-dadas
+
 commands.push({
   name: 'mute',
   do: function (ctx) {
@@ -274,13 +274,16 @@ commands.push({
     if (!ctx.message.reply_to_message) {
       return ctx.reply('Определись кого мутишь хоть.');
     }
-    if (ctx.message.reply_to_message === "private") {
-      return ctx.reply('No selfcest for u my private friend :^)');
+    if (ctx.message.reply_to_message.from.id ===  process.env.TELEGRAM_BOT_USER_ID) {
+      return ctx.reply('(Очко себе замуть, пёс> (╯°□°）╯︵ ┻━┻');
     }
     
-    
     muted_users.push(ctx.message.from.id);
-    ctx.reply('ZA WARUDO', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+    
+    let extra = new Extra();
+    extra.caption = ctx.message.reply_to_message.from.id ;//'ZA WARUDO';
+    extra.reply_to_message_id = ctx.message.reply_to_message.message_id;
+    return ctx.replyWithDocument('https://media2.giphy.com/media/nyNS6Cfrnkdj2/giphy.gif', extra);
   }
 });
 
