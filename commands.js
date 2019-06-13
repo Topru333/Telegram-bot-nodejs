@@ -15,24 +15,20 @@ function setBindings(bot) {
   let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
   request.get(url, (error, response, body) => {
     let commands = JSON.parse(body).commands;
-    for (let i in commands) {
+      for (let i in commands) {
       bot.use((ctx, next) => {
         if (ctx.message.text && ctx.message.text.includes(commands[i].key)) {
           let extra = new Extra();
-          console.log('ha');
           if (commands[i].text) {
             extra.caption = commands[i].text;
           }
 
           if (commands[i].pic) {
-            console.log(commands[i].pic);
             ctx.replyWithPhoto(commands[i].pic, extra);
           } else if (commands[i].gif) {
-            console.log(commands[i].gif);
             ctx.replyWithDocument(commands[i].gif, extra);
           } else if (commands[i].sticker) {
-            console.log(commands[i].sticker);
-            ctx.sendSticker(commands[i].sticker, extra);
+            ctx.replyWithSticker(commands[i].sticker, extra);
           } else {
             ctx.reply(commands[i].text);
           }
