@@ -17,12 +17,11 @@ function setBindings(bot) {
   
   let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
   request.get(url, (error, response, body) => {
-    console.log(body);
+    console.log(response);
   });
 }
 
 const commands = [];
-const bindings = [];
 
 let empty_error = 'Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o';
 
