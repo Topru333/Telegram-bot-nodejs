@@ -20,15 +20,25 @@ function setBindings(bot) {
   request.get(url, (error, response, body) => {
     let commands = JSON.parse(body).commands;
     for (let i in commands) {
-      bot.hears('пинг', (ctx) => {
+      bot.hears(commands[i].key, (ctx) => {
         let extra = Extra.inReplyTo(ctx.message.message_id);
+        
         if (commands[i].text) {
-          
+          extra.caption = commands[i].text;
+        }
+        
+        if (commands[i].pic) {
+          ctx.replyWithPhoto(commands[i].pic, extra);
+        } else if (commands[i].gif) {
+          ctx.replyWithDocument(commands[i].gif, extra);
+        } else if (commands[i].sticker) {
+          ctx.replyWithSticker(commands[i].sticker, extra);
+        } else {
+          ctx.reply(commands[i].text, Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
         }
       });
     }
-    
-    console.log();
+    console.log('Spreadsheet commands has bound.');
   });
 }
 
@@ -101,9 +111,10 @@ commands.push({
       } else {
         let link = response_result.items[0].link;
         let name = response_result.items[0].title;
+        let extra = Extra.HTML(true);
         let text = `<a href="${link}">${name}</a>`;
-      
-        ctx.replyWithHTML(text, Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+        extra.reply_to_message_id = ctx.message.message_id;
+        ctx.replyWithHTML(text, extra);
       }
     });
   }
@@ -134,9 +145,8 @@ commands.push({
         
         let link = response_result.items[index].link;
         let name = response_result.items[index].title;
-        let text = `<a href="${link}">${name}</a>`;
         let extra = Extra.HTML(true);
-        extra.caption = 'Caption text here'
+        extra.caption = `<a href="${link}">${name}</a>`;
         extra.reply_to_message_id = ctx.message.message_id;
         ctx.replyWithPhoto(link, extra)
       }
