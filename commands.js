@@ -47,14 +47,14 @@ let empty_error = 'Пустой запрос, бака не спамь o(≧口�
 commands.push({
   name: 'sheets',
   do: function (ctx) {
-    ctx.reply('https://docs.google.com/spreadsheets/d/1HgpzWnRJqi1YQZ1YxvPbUoJCnAFYCoD73l38eeBofdM/edit?usp=sharing');
+    return ctx.reply('https://docs.google.com/spreadsheets/d/1HgpzWnRJqi1YQZ1YxvPbUoJCnAFYCoD73l38eeBofdM/edit?usp=sharing');
   }
 });
 
 commands.push({
   name: 'alive',
   do: function (ctx) {
-    ctx.reply('Я жива, все ок.');
+    return ctx.reply('Я жива, все ок.');
   }
 });
 
@@ -66,7 +66,7 @@ commands.push({
     let text = util.cutTextCommand(ctx.message.text, this.name);
 
     if (!text) {
-      result = empty_error;
+      ctx.reply(empty_error);
       return;
     }
 
@@ -79,7 +79,7 @@ commands.push({
     else {
       result = `<a href="tg://user?id=${ctx.message.from.id }"> ${ctx.message.from.first_name}</a> ${text} на <b>${procent}</b>`;
     }
-    ctx.replyWithHTML(result);
+    return ctx.replyWithHTML(result);
   }
 });
 
@@ -87,9 +87,9 @@ commands.push({
   name: 'test',
   do: function (ctx)  {
     if (ctx.message.reply_to_message) {
-      ctx.reply(JSON.stringify(ctx.message.reply_to_message, null, 4));
+      return ctx.reply(JSON.stringify(ctx.message.reply_to_message, null, 4));
     } else {
-      ctx.reply(JSON.stringify(ctx.message, null, 4));
+      return ctx.reply(JSON.stringify(ctx.message, null, 4));
     }
   }
 });
@@ -112,14 +112,14 @@ commands.push({
       ctx.webhookReply = false;
       
       if (!response_result.items || response_result.items.length == 0) {
-        ctx.reply('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+        return ctx.reply('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
       } else {
         let link = response_result.items[0].link;
         let name = response_result.items[0].title;
         let extra = Extra.HTML(true);
         let text = `<a href="${link}">${name}</a>`;
         extra.reply_to_message_id = ctx.message.message_id;
-        ctx.replyWithHTML(text, extra);
+        return ctx.replyWithHTML(text, extra);
       }
     });
   }
@@ -153,7 +153,7 @@ commands.push({
         let extra = Extra.HTML(true);
         extra.caption = `<a href="${link}">${name}</a>`;
         extra.reply_to_message_id = ctx.message.message_id;
-        ctx.replyWithPhoto(link, extra)
+        return ctx.replyWithPhoto(link, extra)
       }
     });
   }
@@ -165,7 +165,7 @@ commands.push({
     let text = util.cutTextCommand(ctx.message.text, this.name);
     
     if (!text) {
-      ctx.reply('Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o');
+      return ctx.reply(empty_error);
     }
     
     let url = `https://api.gfycat.com/v1/gfycats/search?search_text=${text.split(' ').join('+')}`;
@@ -177,15 +177,14 @@ commands.push({
       
        
       if (!response_result.gfycats || response_result.gfycats.length == 0) {
-        ctx.reply('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
-        return;
+        return ctx.reply('0 results for current query', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
       }
 
       let max = response_result.gfycats.length;
       let index = Math.floor(Math.random() * max);
       let link = response_result.gfycats[index].gifUrl;
       let extra = Extra.inReplyTo(ctx.message.message_id);
-      ctx.replyWithDocument(link, extra);
+      return ctx.replyWithDocument(link, extra);
     });
   }
 });
@@ -196,7 +195,7 @@ commands.push({
     let text = util.cutTextCommand(ctx.message.text, this.name);
     
     if (!text) {
-      return ctx.reply('Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o');
+      return ctx.reply(empty_error);
     }
     
     let api_key = process.env.GIPHY_API_KEY;
@@ -217,7 +216,7 @@ commands.push({
       let index = Math.floor(Math.random() * max);
       let link = response_result.data[index].images.original.url;
       let extra = Extra.inReplyTo(ctx.message.message_id);
-      ctx.replyWithDocument(link, extra);
+      return ctx.replyWithDocument(link, extra);
     });
   }
 });
@@ -236,7 +235,7 @@ commands.push({
         return;
       }
       
-      ctx.replyWithHTML(decodeURI(`Server <em>${response_result.hostname}</em> is <b>online</b>. %0AVersion: <b>${response_result.version}</b> %0AOnline players: <b>${response_result.players.online}</b>`));
+      return ctx.replyWithHTML(decodeURI(`Server <em>${response_result.hostname}</em> is <b>online</b>. %0AVersion: <b>${response_result.version}</b> %0AOnline players: <b>${response_result.players.online}</b>`));
     });
   }
 });
@@ -265,19 +264,23 @@ commands.push({
     process.exit(1);
   }
 });
-
+dadas
 commands.push({
   name: 'mute',
   do: function (ctx) {
     if (ctx.message.chat.type === "private") {
       return ctx.reply('No selfcest for u my private friend :^)');
-      
+    }
+    if (!ctx.message.reply_to_message) {
+      return ctx.reply('Определись кого мутишь хоть.');
+    }
+    if (ctx.message.reply_to_message === "private") {
+      return ctx.reply('No selfcest for u my private friend :^)');
     }
     
     
-    
     muted_users.push(ctx.message.from.id);
-    ctx.reply('Захлопнись.', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
+    ctx.reply('ZA WARUDO', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
   }
 });
 
