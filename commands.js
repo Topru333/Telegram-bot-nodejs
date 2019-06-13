@@ -10,7 +10,12 @@ function setCommands(bot) {
   }
 }
 
+function setBindings(bot) {
+  let url = process.env.TELEGRAM_BOT_TOKEN;
+}
+
 const commands = [];
+const bindings = [];
 
 let empty_error = 'Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o';
 
@@ -24,30 +29,25 @@ commands.push({
 commands.push({
   name: 'check',
   do: function (ctx) {
-    try {
-      let result;
-      let procent = ('' + (Math.random() * 100)).split(".")[0] + '%';
-      let text = util.cutTextCommand(ctx.message.text, this.name);
+    let result;
+    let procent = ('' + (Math.random() * 100)).split(".")[0] + '%';
+    let text = util.cutTextCommand(ctx.message.text, this.name);
 
-      if (!text) {
-        result = empty_error;
-        return;
-      }
+    if (!text) {
+      result = empty_error;
+      return;
+    }
 
-      if (ctx.message.entities.length > 1 && (ctx.message.entities[1].type === 'text_mention' || ctx.message.entities[1].type === 'mention')) {
-        if (ctx.message.entities[1].type === 'text_mention') {
-          text = text.replace(ctx.message.entities[1].user.first_name, ('<a href="tg://user?id=' + ctx.message.entities[1].user.id + '">' + ctx.message.entities[1].user.first_name + '</a>'));
-        }
-        result = `${text} на ${procent}`;
+    if (ctx.message.entities.length > 1 && (ctx.message.entities[1].type === 'text_mention' || ctx.message.entities[1].type === 'mention')) {
+      if (ctx.message.entities[1].type === 'text_mention') {
+        text = text.replace(ctx.message.entities[1].user.first_name, ('<a href="tg://user?id=' + ctx.message.entities[1].user.id + '">' + ctx.message.entities[1].user.first_name + '</a>'));
       }
-      else {
-        result = `<a href="tg://user?id=${ctx.message.from.id }"> ${ctx.message.from.first_name}</a> ${text} на <b>${procent}</b>`;
-      }
-      ctx.replyWithHTML(result);
+      result = `${text} на ${procent}`;
     }
-    catch (e) {
-      console.log('Ooops', e)
+    else {
+      result = `<a href="tg://user?id=${ctx.message.from.id }"> ${ctx.message.from.first_name}</a> ${text} на <b>${procent}</b>`;
     }
+    ctx.replyWithHTML(result);
   }
 });
 
