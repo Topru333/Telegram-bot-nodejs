@@ -163,6 +163,11 @@ commands.push({
   name: 'gfycat',
   do: function (ctx)  {
     let text = util.cutTextCommand(ctx.message.text, this.name);
+    
+    if (!text) {
+      ctx.reply('Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o');
+    }
+    
     let url = `https://api.gfycat.com/v1/gfycats/search?search_text=${text.split(' ').join('+')}`;
     request.get(url, (error, response, body) => {
       util.checkError(ctx, response, error, 'gfycat api');
@@ -189,6 +194,11 @@ commands.push({
   name: 'giphy',
   do: function (ctx)  {
     let text = util.cutTextCommand(ctx.message.text, this.name);
+    
+    if (!text) {
+      return ctx.reply('Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o');
+    }
+    
     let api_key = process.env.GIPHY_API_KEY;
     let url = `http://api.giphy.com/v1/gifs/search?q=${text.split(' ').join('+')}&api_key=${api_key}`;
     request.get(url, (error, response, body) => {
@@ -255,10 +265,17 @@ commands.push({
     process.exit(1);
   }
 });
-dsds
+
 commands.push({
   name: 'mute',
   do: function (ctx) {
+    if (ctx.message.chat.type === "private") {
+      return ctx.reply('No selfcest for u my private friend :^)');
+      
+    }
+    
+    
+    
     muted_users.push(ctx.message.from.id);
     ctx.reply('Захлопнись.', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
   }
