@@ -264,7 +264,7 @@ commands.push({
     process.exit(1);
   }
 });
-fggdfg
+
 commands.push({
   name: 'mute',
   do: function (ctx) {
@@ -278,11 +278,17 @@ commands.push({
       return ctx.reply('(Очко себе замуть, пёс> (╯°□°）╯︵ ┻━┻');
     }
     
-    muted_users.push(ctx.message.from.id);
-    
     let extra = new Extra();
-    extra.caption = 'ZA WARUDO';
     extra.reply_to_message_id = ctx.message.reply_to_message.message_id;
+    
+    let index = muted_users.indexOf(ctx.message.reply_to_message.from.id);
+    if (index != -1) {
+      return ctx.reply('Он уже.', extra);
+    }
+    
+    muted_users.push(ctx.message.reply_to_message.from.id);
+    
+    extra.caption = 'ZA WARUDO';
     return ctx.replyWithDocument('https://media2.giphy.com/media/nyNS6Cfrnkdj2/giphy.gif', extra);
   }
 });
@@ -300,10 +306,15 @@ commands.push({
       return ctx.reply('(Очко себе замуть, пёс> (╯°□°）╯︵ ┻━┻');
     }
     
-    muted_users.push(ctx.message.from.id);
-    
     let extra = new Extra();
     extra.reply_to_message_id = ctx.message.reply_to_message.message_id;
+    
+    let index = muted_users.indexOf(ctx.message.reply_to_message.from.id);
+    if (index === -1) {
+      return ctx.reply('Этого еще не трогала.', extra);
+    }
+    muted_users.splice(index, 1);
+
     return ctx.replyWithDocument('https://media1.tenor.com/images/da558adfcaaf7eedb607a6c282d123ae/tenor.gif?itemid=12243323', extra);
   }
 });
