@@ -28,7 +28,7 @@ function setBindings(bot) {
           } else if (commands[i].gif) {
             ctx.replyWithDocument(commands[i].gif, extra);
           } else if (commands[i].sticker) {
-            ctx.replyWithSticker(commands[i].sticker, extra);
+            ctx.replyWithSticker(commands[i].sticker);
           } else {
             ctx.reply(commands[i].text);
           }
