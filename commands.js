@@ -7,11 +7,25 @@ const muted_users = [];
 
 function setCommands(bot) {
   for (let i in commands) {
-    bot.command(commands[i].name, (ctx) => commands[i].do(ctx));
+    bot.command(commands[i].name, (ctx) => {
+      if (muted_users.indexOf(ctx.message.from.id) != -1){
+        ctx.deleteMessage(ctx.message.chat.id, ctx.message.message_id);
+      } else {
+        commands[i].do(ctx)
+      }
+    });
   }
 }
 
 function setBindings(bot) {
+  bot.use((ctx, next) => {
+    if (muted_users.indexOf(ctx.message.from.id) != -1){
+      ctx.deleteMessage(ctx.message.chat.id, ctx.message.message_id);
+    } else {
+      next();
+    }
+  });
+  
   let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
   request.get(url, (error, response, body) => {
     let commands = JSON.parse(body).commands;
