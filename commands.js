@@ -257,10 +257,10 @@ commands.push({
 });
 dsds
 commands.push({
-  name: 'restart',
+  name: 'mute',
   do: function (ctx) {
-    ctx.reply('Провожу рестарт. Подождите пару секунд пожалуйста.');
-    process.exit(1);
+    muted_users.push(ctx.message.from.id);
+    ctx.reply('Захлопнись.', Object.assign({ 'reply_to_message_id': ctx.message.message_id }));
   }
 });
 
