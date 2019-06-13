@@ -264,7 +264,7 @@ commands.push({
     process.exit(1);
   }
 });
-
+fggdfg
 commands.push({
   name: 'mute',
   do: function (ctx) {
@@ -274,18 +274,40 @@ commands.push({
     if (!ctx.message.reply_to_message) {
       return ctx.reply('Определись кого мутишь хоть.');
     }
-    if (ctx.message.reply_to_message.from.id ===  process.env.TELEGRAM_BOT_USER_ID) {
+    if (ctx.message.reply_to_message.from.id ===  parseInt(process.env.TELEGRAM_BOT_USER_ID)) {
       return ctx.reply('(Очко себе замуть, пёс> (╯°□°）╯︵ ┻━┻');
     }
     
     muted_users.push(ctx.message.from.id);
     
     let extra = new Extra();
-    extra.caption = ctx.message.reply_to_message.from.id ;//'ZA WARUDO';
+    extra.caption = 'ZA WARUDO';
     extra.reply_to_message_id = ctx.message.reply_to_message.message_id;
     return ctx.replyWithDocument('https://media2.giphy.com/media/nyNS6Cfrnkdj2/giphy.gif', extra);
   }
 });
+
+commands.push({
+  name: 'unmute',
+  do: function (ctx) {
+    if (ctx.message.chat.type === "private") {
+      return ctx.reply('No selfcest for u my private friend :^)');
+    }
+    if (!ctx.message.reply_to_message) {
+      return ctx.reply('Определись кого освобождаешь хоть.');
+    }
+    if (ctx.message.reply_to_message.from.id ===  parseInt(process.env.TELEGRAM_BOT_USER_ID)) {
+      return ctx.reply('(Очко себе замуть, пёс> (╯°□°）╯︵ ┻━┻');
+    }
+    
+    muted_users.push(ctx.message.from.id);
+    
+    let extra = new Extra();
+    extra.reply_to_message_id = ctx.message.reply_to_message.message_id;
+    return ctx.replyWithDocument('https://media1.tenor.com/images/da558adfcaaf7eedb607a6c282d123ae/tenor.gif?itemid=12243323', extra);
+  }
+});
+
 
 module.exports.setCommands = setCommands;
 module.exports.setBindings = setBindings;
