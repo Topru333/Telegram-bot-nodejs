@@ -346,11 +346,6 @@ commands.push({
 commands.push({
   name: 'filter',
   do: function (ctx) {
-    let text = util.cutTextCommand(ctx.message.text, this.name);
-    
-    if (!text) {
-      return ctx.reply(empty_error);
-    }
     if (!ctx.message.reply_to_message) {
       return ctx.reply('Не пойму что биндить, ответь на нуждный текст.');
     }
@@ -358,8 +353,14 @@ commands.push({
       return ctx.reply('(Нельзя> (╯°□°）╯︵ ┻━┻');
     }
     
+    let text = util.cutTextCommand(ctx.message.text, this.name);
+    let reply_text = util.cutTextCommand(ctx.message.reply_to_message.text, this.name);
+    if (!text || !reply_text) {
+      return ctx.reply(empty_error);
+    }
+    
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
-    let query = `?operation=add&key=${text}&type=text`;
+    let query = `?operation=add&key=${reply_text}&type=text&text=${text}`;
     request.post(url+query);
     ctx.reply('Bound');
   }
