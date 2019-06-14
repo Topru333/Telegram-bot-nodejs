@@ -395,15 +395,13 @@ commands.push({
 commands.push({
   name: 'unbind',
   do: function (ctx) {
-    if (ctx.message.reply_to_message.from.id ===  parseInt(process.env.TELEGRAM_BOT_USER_ID)) {
-      return ctx.reply('(Нельзя> (╯°□°）╯︵ ┻━┻');
-    }
-    
     let text = util.cutTextCommand(ctx.message.text, this.name).toLowerCase();
     if (!text) {
       return ctx.reply(empty_error);
     }
-    
+    if (!bindings[text]) {
+      return ctx.reply('Такой комманды и так нет.');
+    }
     let command = {
       key: encodeURI(text),
       operation: 'remove'
@@ -414,9 +412,10 @@ commands.push({
       query += `&${key}=${encodeURI(command[key])}`;
     }
     query = '?' + query.slice(1, query.length);
-    
+    console.log(query);
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
     request.post(url+query);
+    delete bindings[text];
     ctx.reply('Unbound');
   }
 });
