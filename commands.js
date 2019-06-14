@@ -420,6 +420,18 @@ commands.push({
   }
 });
 
+commands.push({
+  name: 'answerme',
+  do: function (ctx) {
+    let text = util.cutTextCommand(ctx.message.text, this.name).toLowerCase();
+    if (!text) {
+      return ctx.reply(empty_error);
+    }
+    let answer = Math.random() > 0.5 ? 'да' : 'нет';
+    ctx.replyWithHTML(`${text} Ответ: <b>${answer}</b>`);
+  }
+});
+
 module.exports.setBot = setBot;
 module.exports.setCommands = setCommands;
 module.exports.setBindings = setBindings;
