@@ -329,10 +329,15 @@ commands.push({
     return ctx.replyWithDocument('https://media1.tenor.com/images/da558adfcaaf7eedb607a6c282d123ae/tenor.gif?itemid=12243323', extra);
   }
 });
-ывфвф
+
 commands.push({
   name: 'filter',
   do: function (ctx) {
+    let text = util.cutTextCommand(ctx.message.text, this.name);
+    
+    if (!text) {
+      return ctx.reply(empty_error);
+    }
     if (!ctx.message.reply_to_message) {
       return ctx.reply('Не пойму что биндить, ответь на нуждный текст.');
     }
@@ -340,7 +345,9 @@ commands.push({
       return ctx.reply('(Нельзя> (╯°□°）╯︵ ┻━┻');
     }
     
-    
+    let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
+    let query = `?operation=add&key=${text}&type=text`;
+    request.post(url+query);
   }
 });
 module.exports.setCommands = setCommands;
