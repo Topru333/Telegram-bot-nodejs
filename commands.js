@@ -340,7 +340,7 @@ commands.push({
     return ctx.replyWithDocument('https://media1.tenor.com/images/da558adfcaaf7eedb607a6c282d123ae/tenor.gif?itemid=12243323', extra);
   }
 });
-вфывф
+
 commands.push({
   name: 'bind',
   do: function (ctx) {
@@ -355,9 +355,14 @@ commands.push({
     if (!text || !ctx.message.reply_to_message) {
       return ctx.reply(empty_error);
     }
-    
-    let reply_text = ctx.message.reply_to_message.text;
-    
+    let reply_text = '';
+    if (ctx.message.reply_to_message.sticker) {
+        
+    } else if (ctx.message.reply_to_message.photo) {
+      
+    } else if (ctx.message.reply_to_message.document) {
+      
+    } 
     
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
     let query = `?operation=add&key=${text}&type=text&text=${reply_text}`;
