@@ -340,7 +340,7 @@ commands.push({
     return ctx.replyWithDocument('https://media1.tenor.com/images/da558adfcaaf7eedb607a6c282d123ae/tenor.gif?itemid=12243323', extra);
   }
 });
-dada
+вфывф
 commands.push({
   name: 'filter',
   do: function (ctx) {
@@ -352,13 +352,9 @@ commands.push({
     }
     
     let text = util.cutTextCommand(ctx.message.text, this.name);
-    if (!text || !ctx.message.reply_to_message) {
-      return ctx.reply(empty_error);
-    }
     let reply_text = ctx.message.reply_to_message.text;
-    
-    if () {
-        
+    if (!text || !reply_text) {
+      return ctx.reply(empty_error);
     }
     
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
