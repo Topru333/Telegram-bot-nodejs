@@ -39,15 +39,13 @@ function setBindings() {
   request.get(url, (error, response, body) => {
     let commands = JSON.parse(body).commands;
     for (let i in commands) {
-      bot.use((ctx, next) => {
-        bind(ctx, commands[i]);
-      });
+      bind(commands[i]);
     }     
     console.log('Spreadsheet commands has bound.');
   });
 }
 
-function bind(ctx, command) {
+function bind(command) {
   bot.use((ctx, next) => {
     if (ctx.message.text && ctx.message.text.toLowerCase().includes(command.key.toLowerCase())) {
       let extra = new Extra();
@@ -354,7 +352,7 @@ commands.push({
     }
     
     let text = util.cutTextCommand(ctx.message.text, this.name);
-    let reply_text = util.cutTextCommand(ctx.message.reply_to_message.text, this.name);
+    let reply_text = ctx.message.reply_to_message.text;
     if (!text || !reply_text) {
       return ctx.reply(empty_error);
     }
@@ -362,6 +360,11 @@ commands.push({
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
     let query = `?operation=add&key=${reply_text}&type=text&text=${text}`;
     request.post(url+query);
+    let command = {
+      key: reply_text,
+      text: text
+    };
+    bind(command);
     ctx.reply('Bound');
   }
 });
