@@ -355,22 +355,33 @@ commands.push({
     if (!text || !ctx.message.reply_to_message) {
       return ctx.reply(empty_error);
     }
-    let reply_text = '';
     
     let command = {
-      key: reply_text
+      key: text
     };
+    let query = `?operation=add&key=${command.key}`;
     
     if (ctx.message.reply_to_message.sticker) {
+      
       command.sticker = ctx.message.reply_to_message.sticker.file_id;
+      query += `&sticker=${command.sticker}&type=sticker`;
+      
     } else if (ctx.message.reply_to_message.photo) {
+      
       command.photo = ctx.message.reply_to_message.photo.file_id;
+      query += `&photo=${command.photo}&type=photo`;
+      
     } else if (ctx.message.reply_to_message.document) {
+      
       command.document = ctx.message.reply_to_message.document.file_id;
+      query += `&document=${command.document}&type=document`;
+      
     } 
     
+    
+    
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
-    let query = `?operation=add&key=${text}&type=text&text=${reply_text}`;
+    
     request.post(url+query);
     bind(command);
     ctx.reply('Bound');
