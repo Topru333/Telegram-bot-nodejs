@@ -2,9 +2,9 @@ const util = require('./util');
 const request = require('request');
 
 const Extra = require('telegraf/extra')
-das
+
 const commands = [];
-const bindings = [];
+const bindings = {};
 const muted_users = [];
 
 const empty_error = 'Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o';
@@ -38,33 +38,32 @@ function setBindings() {
 
   let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
   request.get(url, (error, response, body) => {
-    let commands = JSON.parse(body).commands;
-    for (let i in commands) {
-      bind(commands[i]);
-    }     
-    console.log('Spreadsheet commands has bound.');
-  });
-}
-
-function bind(command) {
-  bot.use((ctx, next) => {
-    if (ctx.message.text && ctx.message.text.toLowerCase().includes(command.key)) {
-      let extra = new Extra();
-      if (command.text) {
-        extra.caption = command.text;
-      }
-
-      if (command.pic) {
-        ctx.replyWithPhoto(command.pic, extra);
-      } else if (command.document) {
-        ctx.replyWithDocument(command.document, extra);
-      } else if (command.sticker) {
-        ctx.replyWithSticker(command.sticker);
-      } else {
-        ctx.reply(command.text);
-      }
+    let array = JSON.parse(body).commands;
+    for (let i in array) {
+      bindings[array[i].key] = array[i];
     }
-    next();
+    bot.use((ctx, next) => {
+      for (let key in bindings) {
+        if (ctx.message.text && ctx.message.text.toLowerCase().includes(key)) {
+          let extra = new Extra();
+          if (bindings[key].text) {
+            extra.caption = bindings[key].text;
+          }
+
+          if (bindings[key].pic) {
+            ctx.replyWithPhoto(bindings[key].pic, extra);
+          } else if (bindings[key].document) {
+            ctx.replyWithDocument(bindings[key].document, extra);
+          } else if (bindings[key].sticker) {
+            ctx.replyWithSticker(bindings[key].sticker);
+          } else {
+            ctx.reply(bindings[key].text);
+          }
+        }
+      }   
+      next();
+    });
+    console.log('Spreadsheet commands has bound.');
   });
 }
 
@@ -380,7 +379,7 @@ commands.push({
       command.type = 'document';
     } 
     
-    bind(command);
+    bindings[command.key] = command;
     
     let query = '';
     for (let key in command) {
