@@ -23,7 +23,7 @@ bot.startWebhook('/webhook', null, appPort)
 // Listener
 //bot.on('text', (ctx) => ctx.reply('Hello Human'))
 bot.hears('пинг', (ctx) => ctx.reply('понг'));
-commands.setCommands(bot);
-commands.setBindings(bot);
-
+commands.setBot(bot);
+commands.setCommands();
+commands.setBindings();
 console.log(`Listening incoming webhook on: https://${appName}.glitch.me/webhook`)

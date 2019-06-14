@@ -8,7 +8,13 @@ const muted_users = [];
 
 const empty_error = 'Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o';
 
-function setCommands(bot) {
+let bot;
+
+function setBot(_bot) {
+  bot = _bot;
+}
+
+function setCommands() {
   for (let i in commands) {
     bot.command(commands[i].name, (ctx) => {
       if (ctx.message && muted_users.indexOf(ctx.message.from.id) != -1){
@@ -20,7 +26,7 @@ function setCommands(bot) {
   }
 }
 
-function setBindings(bot) {
+function setBindings() {
   bot.use((ctx, next) => {
     if (ctx.message && muted_users.indexOf(ctx.message.from.id) != -1){
       ctx.deleteMessage(ctx.message.message_id);
@@ -34,30 +40,14 @@ function setBindings(bot) {
     let commands = JSON.parse(body).commands;
     for (let i in commands) {
       bot.use((ctx, next) => {
-        if (ctx.message.text && ctx.message.text.toLowerCase().includes(commands[i].key.toLowerCase())) {
-          let extra = new Extra();
-          if (commands[i].text) {
-            extra.caption = commands[i].text;
-          }
-
-          if (commands[i].pic) {
-            ctx.replyWithPhoto(commands[i].pic, extra);
-          } else if (commands[i].document) {
-            ctx.replyWithDocument(commands[i].document, extra);
-          } else if (commands[i].sticker) {
-            ctx.replyWithSticker(commands[i].sticker);
-          } else {
-            ctx.reply(commands[i].text);
-          }
-        }
-        next();
-      })
-    }
+        bind(ctx, commands[i]);
+      });
+    }     
     console.log('Spreadsheet commands has bound.');
   });
 }
 
-function bind(bot, ctx, command) {
+function bind(ctx, command) {
   bot.use((ctx, next) => {
     if (ctx.message.text && ctx.message.text.toLowerCase().includes(command.key.toLowerCase())) {
       let extra = new Extra();
@@ -70,13 +60,13 @@ function bind(bot, ctx, command) {
       } else if (command.document) {
         ctx.replyWithDocument(command.document, extra);
       } else if (command.sticker) {
-        ctx.replyWithSticker(ccommand.sticker);
+        ctx.replyWithSticker(command.sticker);
       } else {
-        ctx.reply(commands[i].text);
+        ctx.reply(command.text);
       }
     }
     next();
-  })
+  });
 }
 
 
@@ -373,5 +363,7 @@ commands.push({
     request.post(url+query);
   }
 });
+
+module.exports.setBot = setBot;
 module.exports.setCommands = setCommands;
 module.exports.setBindings = setBindings;
