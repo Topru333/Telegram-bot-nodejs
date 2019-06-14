@@ -342,7 +342,7 @@ commands.push({
 });
 вфывф
 commands.push({
-  name: 'filter',
+  name: 'bind',
   do: function (ctx) {
     if (!ctx.message.reply_to_message) {
       return ctx.reply('Не пойму что биндить, ответь на нуждный текст.');
@@ -352,13 +352,15 @@ commands.push({
     }
     
     let text = util.cutTextCommand(ctx.message.text, this.name);
-    let reply_text = ctx.message.reply_to_message.text;
-    if (!text || !reply_text) {
+    if (!text || !ctx.message.reply_to_message) {
       return ctx.reply(empty_error);
     }
     
+    let reply_text = ctx.message.reply_to_message.text;
+    
+    
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
-    let query = `?operation=add&key=${reply_text}&type=text&text=${text}`;
+    let query = `?operation=add&key=${text}&type=text&text=${reply_text}`;
     request.post(url+query);
     let command = {
       key: reply_text,
