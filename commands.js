@@ -2,8 +2,9 @@ const util = require('./util');
 const request = require('request');
 
 const Extra = require('telegraf/extra')
-
+das
 const commands = [];
+const bindings = [];
 const muted_users = [];
 
 const empty_error = 'Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o';
