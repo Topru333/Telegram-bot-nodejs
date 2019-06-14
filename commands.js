@@ -329,7 +329,19 @@ commands.push({
     return ctx.replyWithDocument('https://media1.tenor.com/images/da558adfcaaf7eedb607a6c282d123ae/tenor.gif?itemid=12243323', extra);
   }
 });
-
-
+ывфвф
+commands.push({
+  name: 'filter',
+  do: function (ctx) {
+    if (!ctx.message.reply_to_message) {
+      return ctx.reply('Не пойму что биндить, ответь на нуждный текст.');
+    }
+    if (ctx.message.reply_to_message.from.id ===  parseInt(process.env.TELEGRAM_BOT_USER_ID)) {
+      return ctx.reply('(Нельзя> (╯°□°）╯︵ ┻━┻');
+    }
+    
+    
+  }
+});
 module.exports.setCommands = setCommands;
 module.exports.setBindings = setBindings;
