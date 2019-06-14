@@ -340,7 +340,7 @@ commands.push({
     return ctx.replyWithDocument('https://media1.tenor.com/images/da558adfcaaf7eedb607a6c282d123ae/tenor.gif?itemid=12243323', extra);
   }
 });
-dasdsa
+
 commands.push({
   name: 'bind',
   do: function (ctx) {
@@ -360,7 +360,9 @@ commands.push({
       key: text,
       operation: 'add'
     };
-        
+    
+    
+    
     if (ctx.message.reply_to_message.text) {
       command.text = ctx.message.reply_to_message.text;
       command.type = 'text';
@@ -372,23 +374,27 @@ commands.push({
     } else if (ctx.message.reply_to_message.photo) {
       command.photo = ctx.message.reply_to_message.photo.file_id;
       command.type = 'photo';
-    } else if (ctx.message.reply_to_message.document) 
+    } else if (ctx.message.reply_to_message.document) {
       command.document = ctx.message.reply_to_message.document.file_id;
       command.type = 'document';
     } 
     
     let query = '';
-  
-    
+    for (let key in command) {
+      query += `&${key}=${command[key]}`;
+    }
+    query = '?' + query.slice(1, query.length);
     
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
-    
+    console.log(query);
+    console.log();
+    console.log(query);
     request.post(url+query);
     bind(command);
     ctx.reply('Bound');
   }
 });
-
+dada
 module.exports.setBot = setBot;
 module.exports.setCommands = setCommands;
 module.exports.setBindings = setBindings;
