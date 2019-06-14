@@ -46,11 +46,8 @@ function setBindings() {
 }
 
 function bind(command) {
-  console.log(JSON.stringify(command));
   bot.use((ctx, next) => {
-    console.log('KEY --------->' + command.key);
     if (ctx.message.text && ctx.message.text.toLowerCase().includes(command.key)) {
-      console.log('ping');
       let extra = new Extra();
       if (command.text) {
         extra.caption = command.text;
@@ -383,17 +380,12 @@ commands.push({
     } 
     
     bind(command);
-    command.key = encodeURI(command.key);
-    if (command.text) {
-      command.text = encodeURI(command.text);
-    }
     
     let query = '';
     for (let key in command) {
-      query += `&${key}=${command[key]}`;
+      query += `&${key}=${encodeURI(command[key])}`;
     }
     query = '?' + query.slice(1, query.length);
-    console.log(query);
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
     request.post(url+query);
     ctx.reply('Bound');
@@ -419,7 +411,7 @@ commands.push({
     
     let query = '';
     for (let key in command) {
-      query += `&${key}=${command[key]}`;
+      query += `&${key}=${encodeURI(command[key])}`;
     }
     query = '?' + query.slice(1, query.length);
     
