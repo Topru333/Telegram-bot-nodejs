@@ -340,7 +340,7 @@ commands.push({
     return ctx.replyWithDocument('https://media1.tenor.com/images/da558adfcaaf7eedb607a6c282d123ae/tenor.gif?itemid=12243323', extra);
   }
 });
-fqfq
+
 commands.push({
   name: 'bind',
   do: function (ctx) {
@@ -351,19 +351,19 @@ commands.push({
       return ctx.reply('(Нельзя> (╯°□°）╯︵ ┻━┻');
     }
     
-    let text = util.cutTextCommand(ctx.message.text, this.name);
+    let text = util.cutTextCommand(ctx.message.text, this.name).toLowerCase();
     if (!text || !ctx.message.reply_to_message) {
       return ctx.reply(empty_error);
     }
     
     let command = {
-      key: encodeURI(text),
+      key: text,
       operation: 'add'
     };
     
     
     if (ctx.message.reply_to_message.text) {
-      command.text = encodeURI(ctx.message.reply_to_message.text);
+      command.text = ctx.message.reply_to_message.text;
       command.type = 'text';
     }
     
@@ -379,6 +379,13 @@ commands.push({
       command.type = 'document';
     } 
     
+    bind(command);
+    
+    command.key = encodeURI(command.key);
+    if (command.text) {
+      command.text = encodeURI(command.text);
+    }
+    
     let query = '';
     for (let key in command) {
       query += `&${key}=${command[key]}`;
@@ -387,7 +394,6 @@ commands.push({
     
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
     request.post(url+query);
-    bind(command);
     ctx.reply('Bound');
   }
 });
@@ -395,40 +401,19 @@ commands.push({
 commands.push({
   name: 'unbind',
   do: function (ctx) {
-    if (!ctx.message.reply_to_message) {
-      return ctx.reply('Не пойму что биндить, ответь на нуждный текст.');
-    }
     if (ctx.message.reply_to_message.from.id ===  parseInt(process.env.TELEGRAM_BOT_USER_ID)) {
       return ctx.reply('(Нельзя> (╯°□°）╯︵ ┻━┻');
     }
     
-    let text = util.cutTextCommand(ctx.message.text, this.name);
-    if (!text || !ctx.message.reply_to_message) {
+    let text = util.cutTextCommand(ctx.message.text, this.name).toLowerCase();
+    if (!text) {
       return ctx.reply(empty_error);
     }
     
     let command = {
       key: encodeURI(text),
-      operation: 'add'
+      operation: 'remove'
     };
-    
-    
-    if (ctx.message.reply_to_message.text) {
-      command.text = encodeURI(ctx.message.reply_to_message.text);
-      command.type = 'text';
-    }
-    
-    if (ctx.message.reply_to_message.sticker) {
-      command.sticker = ctx.message.reply_to_message.sticker.file_id;
-      command.type = 'sticker';
-    } else if (ctx.message.reply_to_message.photo) {
-      let index = ctx.message.reply_to_message.photo.length - 1;
-      command.photo = ctx.message.reply_to_message.photo[index].file_id;
-      command.type = 'photo';
-    } else if (ctx.message.reply_to_message.document) {
-      command.document = ctx.message.reply_to_message.document.file_id;
-      command.type = 'document';
-    } 
     
     let query = '';
     for (let key in command) {
@@ -438,8 +423,7 @@ commands.push({
     
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
     request.post(url+query);
-    bind(command);
-    ctx.reply('Bound');
+    ctx.reply('Unbound');
   }
 });
 
