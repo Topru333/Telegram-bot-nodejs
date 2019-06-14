@@ -3,7 +3,10 @@ const request = require('request');
 
 const Extra = require('telegraf/extra')
 
+const commands = [];
 const muted_users = [];
+
+const empty_error = 'Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o';
 
 function setCommands(bot) {
   for (let i in commands) {
@@ -29,7 +32,7 @@ function setBindings(bot) {
   let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
   request.get(url, (error, response, body) => {
     let commands = JSON.parse(body).commands;
-      for (let i in commands) {
+    for (let i in commands) {
       bot.use((ctx, next) => {
         if (ctx.message.text && ctx.message.text.toLowerCase().includes(commands[i].key.toLowerCase())) {
           let extra = new Extra();
@@ -54,9 +57,29 @@ function setBindings(bot) {
   });
 }
 
-const commands = [];
+function bind(bot, ctx, command) {
+  bot.use((ctx, next) => {
+    if (ctx.message.text && ctx.message.text.toLowerCase().includes(command.key.toLowerCase())) {
+      let extra = new Extra();
+      if (command.text) {
+        extra.caption = command.text;
+      }
 
-let empty_error = 'Пустой запрос, бака не спамь o(≧口≦)o o(≧口≦)o o(≧口≦)o';
+      if (command.pic) {
+        ctx.replyWithPhoto(command.pic, extra);
+      } else if (command.document) {
+        ctx.replyWithDocument(command.document, extra);
+      } else if (command.sticker) {
+        ctx.replyWithSticker(ccommand.sticker);
+      } else {
+        ctx.reply(commands[i].text);
+      }
+    }
+    next();
+  })
+}
+
+
 
 commands.push({
   name: 'sheets',
@@ -329,7 +352,7 @@ commands.push({
     return ctx.replyWithDocument('https://media1.tenor.com/images/da558adfcaaf7eedb607a6c282d123ae/tenor.gif?itemid=12243323', extra);
   }
 });
-
+ss
 commands.push({
   name: 'filter',
   do: function (ctx) {
