@@ -357,27 +357,28 @@ commands.push({
     }
     
     let command = {
-      key: text
+      key: text,
+      operation: 'add'
     };
-    let query = `?operation=add&key=${command.key}`;
+        
+    if (ctx.message.reply_to_message.text) {
+      command.text = ctx.message.reply_to_message.text;
+      command.type = 'text';
+    }
     
     if (ctx.message.reply_to_message.sticker) {
-      
       command.sticker = ctx.message.reply_to_message.sticker.file_id;
-      query += `&sticker=${command.sticker}&type=sticker`;
-      
+      command.type = 'sticker';
     } else if (ctx.message.reply_to_message.photo) {
-      
       command.photo = ctx.message.reply_to_message.photo.file_id;
-      query += `&photo=${command.photo}&type=photo`;
-      
-    } else if (ctx.message.reply_to_message.document) {
-      
+      command.type = 'photo';
+    } else if (ctx.message.reply_to_message.document) 
       command.document = ctx.message.reply_to_message.document.file_id;
-      query += `&document=${command.document}&type=document`;
-      
+      command.type = 'document';
     } 
     
+    let query = '';
+  
     
     
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
