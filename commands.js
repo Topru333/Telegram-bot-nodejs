@@ -340,7 +340,7 @@ commands.push({
     return ctx.replyWithDocument('https://media1.tenor.com/images/da558adfcaaf7eedb607a6c282d123ae/tenor.gif?itemid=12243323', extra);
   }
 });
-
+dasdsa
 commands.push({
   name: 'bind',
   do: function (ctx) {
@@ -356,21 +356,22 @@ commands.push({
       return ctx.reply(empty_error);
     }
     let reply_text = '';
+    
+    let command = {
+      key: reply_text
+    };
+    
     if (ctx.message.reply_to_message.sticker) {
-        
+      command.sticker = ctx.message.reply_to_message.sticker.file_id;
     } else if (ctx.message.reply_to_message.photo) {
-      
+      command.photo = ctx.message.reply_to_message.photo.file_id;
     } else if (ctx.message.reply_to_message.document) {
-      
+      command.document = ctx.message.reply_to_message.document.file_id;
     } 
     
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
     let query = `?operation=add&key=${text}&type=text&text=${reply_text}`;
     request.post(url+query);
-    let command = {
-      key: reply_text,
-      text: text
-    };
     bind(command);
     ctx.reply('Bound');
   }
