@@ -357,14 +357,13 @@ commands.push({
     }
     
     let command = {
-      key: text,
+      key: encodeURI(text),
       operation: 'add'
     };
     
     
-    
     if (ctx.message.reply_to_message.text) {
-      command.text = ctx.message.reply_to_message.text;
+      command.text = encodeURI(ctx.message.reply_to_message.text);
       command.type = 'text';
     }
     
@@ -372,7 +371,8 @@ commands.push({
       command.sticker = ctx.message.reply_to_message.sticker.file_id;
       command.type = 'sticker';
     } else if (ctx.message.reply_to_message.photo) {
-      command.photo = ctx.message.reply_to_message.photo.file_id;
+      let index = ctx.message.reply_to_message.photo.length - 1;
+      command.photo = ctx.message.reply_to_message.photo[index].file_id;
       command.type = 'photo';
     } else if (ctx.message.reply_to_message.document) {
       command.document = ctx.message.reply_to_message.document.file_id;
@@ -388,13 +388,13 @@ commands.push({
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
     console.log(query);
     console.log();
-    console.log(query);
+    console.log(JSON.stringify(ctx.message.reply_to_message, null, 4));
     request.post(url+query);
     bind(command);
     ctx.reply('Bound');
   }
 });
-dada
+
 module.exports.setBot = setBot;
 module.exports.setCommands = setCommands;
 module.exports.setBindings = setBindings;
