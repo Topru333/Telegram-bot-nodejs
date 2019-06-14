@@ -386,9 +386,6 @@ commands.push({
     query = '?' + query.slice(1, query.length);
     
     let url = process.env.GOOGLE_SHEETS_BINDINGS_URL;
-    console.log(query);
-    console.log();
-    console.log(JSON.stringify(ctx.message.reply_to_message, null, 4));
     request.post(url+query);
     bind(command);
     ctx.reply('Bound');
